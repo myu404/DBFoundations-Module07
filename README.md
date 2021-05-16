@@ -69,7 +69,7 @@ Dynamic data reports are accomplished through functions by passing input argumen
 Functions are also utilized to process data, especially when migrating data and schema matching.
 
 ## Appendix
-Assignment07DB_YuMichael.sql
+[Module 7 SQL Code](https://github.com/myu404/DBFoundations-Module07/blob/master/Assignment07_YuMichael.sql)
 ```
 --*************************************************************************--
 -- Title: Assignment07
