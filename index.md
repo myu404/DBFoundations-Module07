@@ -79,16 +79,16 @@ Functions are also utilized to process data, especially when migrating data and 
 -- 2021-05-15,MYu,Created File
 --**************************************************************************--
 Begin Try
-    Use Master;
-    If Exists(Select Name From SysDatabases Where Name = 'Assignment07DB_YuMichael')
-     Begin 
-      Alter Database [Assignment07DB_YuMichael] set Single_user With Rollback Immediate;
-      Drop Database Assignment07DB_YuMichael;
-     End
-    Create Database Assignment07DB_YuMichael;
+	Use Master;
+	If Exists(Select Name From SysDatabases Where Name = 'Assignment07DB_YuMichael')
+	 Begin 
+	  Alter Database [Assignment07DB_YuMichael] set Single_user With Rollback Immediate;
+	  Drop Database Assignment07DB_YuMichael;
+	 End
+	Create Database Assignment07DB_YuMichael;
 End Try
 Begin Catch
-    Print Error_Number();
+	Print Error_Number();
 End Catch
 go
 Use Assignment07DB_YuMichael;
@@ -128,66 +128,66 @@ go
 
 -- Add Constraints (Module 02) -- 
 Begin  -- Categories
-    Alter Table Categories 
-     Add Constraint pkCategories 
-      Primary Key (CategoryId);
+	Alter Table Categories 
+	 Add Constraint pkCategories 
+	  Primary Key (CategoryId);
 
-    Alter Table Categories 
-     Add Constraint ukCategories 
-      Unique (CategoryName);
+	Alter Table Categories 
+	 Add Constraint ukCategories 
+	  Unique (CategoryName);
 End
 go 
 
 Begin -- Products
-    Alter Table Products 
-     Add Constraint pkProducts 
-      Primary Key (ProductId);
+	Alter Table Products 
+	 Add Constraint pkProducts 
+	  Primary Key (ProductId);
 
-    Alter Table Products 
-     Add Constraint ukProducts 
-      Unique (ProductName);
+	Alter Table Products 
+	 Add Constraint ukProducts 
+	  Unique (ProductName);
 
-    Alter Table Products 
-     Add Constraint fkProductsToCategories 
-      Foreign Key (CategoryId) References Categories(CategoryId);
+	Alter Table Products 
+	 Add Constraint fkProductsToCategories 
+	  Foreign Key (CategoryId) References Categories(CategoryId);
 
-    Alter Table Products 
-     Add Constraint ckProductUnitPriceZeroOrHigher 
-      Check (UnitPrice >= 0);
+	Alter Table Products 
+	 Add Constraint ckProductUnitPriceZeroOrHigher 
+	  Check (UnitPrice >= 0);
 End
 go
 
 Begin -- Employees
-    Alter Table Employees
-     Add Constraint pkEmployees 
-      Primary Key (EmployeeId);
+	Alter Table Employees
+	 Add Constraint pkEmployees 
+	  Primary Key (EmployeeId);
 
-    Alter Table Employees 
-     Add Constraint fkEmployeesToEmployeesManager 
-      Foreign Key (ManagerId) References Employees(EmployeeId);
+	Alter Table Employees 
+	 Add Constraint fkEmployeesToEmployeesManager 
+	  Foreign Key (ManagerId) References Employees(EmployeeId);
 End
 go
 
 Begin -- Inventories
-    Alter Table Inventories 
-     Add Constraint pkInventories 
-      Primary Key (InventoryId);
+	Alter Table Inventories 
+	 Add Constraint pkInventories 
+	  Primary Key (InventoryId);
 
-    Alter Table Inventories
-     Add Constraint dfInventoryDate
-      Default GetDate() For InventoryDate;
+	Alter Table Inventories
+	 Add Constraint dfInventoryDate
+	  Default GetDate() For InventoryDate;
 
-    Alter Table Inventories
-     Add Constraint fkInventoriesToProducts
-      Foreign Key (ProductId) References Products(ProductId);
+	Alter Table Inventories
+	 Add Constraint fkInventoriesToProducts
+	  Foreign Key (ProductId) References Products(ProductId);
 
-    Alter Table Inventories 
-     Add Constraint ckInventoryCountZeroOrHigher 
-      Check ([Count] >= 0);
+	Alter Table Inventories 
+	 Add Constraint ckInventoryCountZeroOrHigher 
+	  Check ([Count] >= 0);
 
-    Alter Table Inventories
-     Add Constraint fkInventoriesToEmployees
-      Foreign Key (EmployeeId) References Employees(EmployeeId);
+	Alter Table Inventories
+	 Add Constraint fkInventoriesToEmployees
+	  Foreign Key (EmployeeId) References Employees(EmployeeId);
 End 
 go
 
@@ -265,8 +265,8 @@ go
 -- Order the result by the product!
 
 Select 
-    [ProductName]
-    , Format([UnitPrice], 'C', 'en-US') As [Product Price]
+	[ProductName]
+	, Format([UnitPrice], 'C', 'en-US') As [Product Price]
 From dbo.vProducts
 Order by [ProductName];
 
@@ -278,12 +278,12 @@ go
 -- Order the result by the Category and Product!
 
 Select
-    [CategoryName]
-    , [ProductName]
-    , Format([UnitPrice], 'C', 'en-US') As [Product Price]
+	[CategoryName]
+	, [ProductName]
+	, Format([UnitPrice], 'C', 'en-US') As [Product Price]
 From dbo.vProducts as p
-    Inner Join dbo.vCategories as c
-    On p.CategoryID = c.CategoryID
+	Inner Join dbo.vCategories as c
+	On p.CategoryID = c.CategoryID
 Order by [CategoryName], [ProductName];
 
 go
@@ -294,12 +294,12 @@ go
 -- Order the results by the Product, Date, and Count!
 
 Select
-    [ProductName]
-    , DateName(month, [InventoryDate]) + ', ' + DateName(year, [InventoryDate]) As [Inventory Date]
-    , [Count]
+	[ProductName]
+	, DateName(month, [InventoryDate]) + ', ' + DateName(year, [InventoryDate]) As [Inventory Date]
+	, [Count]
 From dbo.vProducts as p
-    Inner Join dbo.vInventories as i
-    On p.ProductID = i.ProductID
+	Inner Join dbo.vInventories as i
+	On p.ProductID = i.ProductID
 Order by [ProductName], [InventoryDate], [Count];
 
 go
@@ -311,14 +311,14 @@ go
 
 Create View vProductInventories
 As
-    Select Top 1000000000
-        [ProductName]
-        , DateName(month, [InventoryDate]) + ', ' + DateName(year, [InventoryDate]) As [Inventory Date]
-        , [Count]
-    From dbo.vProducts as p
-        Inner Join dbo.vInventories as i
-        On p.ProductID = i.ProductID
-    Order by [ProductName], [InventoryDate], [Count];
+	Select Top 1000000000
+		[ProductName]
+		, DateName(month, [InventoryDate]) + ', ' + DateName(year, [InventoryDate]) As [Inventory Date]
+		, [Count]
+	From dbo.vProducts as p
+		Inner Join dbo.vInventories as i
+		On p.ProductID = i.ProductID
+	Order by [ProductName], [InventoryDate], [Count];
 go
 
 -- Check that it works: Select * From vProductInventories;
@@ -331,16 +331,16 @@ go
 
 Create View vCategoryInventories
 As
-    Select
-        [CategoryName]
-        , DateName(month, [InventoryDate]) + ', ' + DateName(year, [InventoryDate]) As [Inventory Date]
-        , Sum([Count]) As [Total Count]
-    From vCategories 
-        Inner Join vProducts
-            On vCategories.CategoryID = vProducts.CategoryID
-        Inner Join vInventories
-            On vProducts.ProductID = vInventories.ProductID
-    Group By [CategoryName], [InventoryDate]
+	Select
+		[CategoryName]
+		, DateName(month, [InventoryDate]) + ', ' + DateName(year, [InventoryDate]) As [Inventory Date]
+		, Sum([Count]) As [Total Count]
+	From vCategories 
+		Inner Join vProducts
+			On vCategories.CategoryID = vProducts.CategoryID
+		Inner Join vInventories
+			On vProducts.ProductID = vInventories.ProductID
+	Group By [CategoryName], [InventoryDate]
 go
 -- Check that it works: Select * From vCategoryInventories;
 Select * From vCategoryInventories;
@@ -355,16 +355,16 @@ go
 
 Create View vProductInventoriesWithPreviousMonthCounts
 As
-    Select Top 1000000000
-        [ProductName]
-        , DateName(month, [InventoryDate]) + ', ' + DateName(year, [InventoryDate]) As [Inventory Date]
-        , Sum([Count]) As [Total Count]
-        , IIF(Year([InventoryDate]) = 1996, 0, IsNull(Lag(Sum([Count]), 1) Over(Order by [ProductName], Month([InventoryDate])), 0)) As [Previous Count]
-    From dbo.vProducts as p
-        Inner Join dbo.vInventories as i
-        On p.ProductID = i.ProductID
-    Group By [ProductName], [InventoryDate]
-    Order by [ProductName], [InventoryDate], [Total Count];
+	Select Top 1000000000
+		[ProductName]
+		, DateName(month, [InventoryDate]) + ', ' + DateName(year, [InventoryDate]) As [Inventory Date]
+		, Sum([Count]) As [Total Count]
+		, IIF(Year([InventoryDate]) = 1996, 0, IsNull(Lag(Sum([Count]), 1) Over(Order by [ProductName], Month([InventoryDate])), 0)) As [Previous Count]
+	From dbo.vProducts as p
+		Inner Join dbo.vInventories as i
+		On p.ProductID = i.ProductID
+	Group By [ProductName], [InventoryDate]
+	Order by [ProductName], [InventoryDate], [Total Count];
 go
 
 -- Check that it works: Select * From vProductInventoriesWithPreviousMonthCounts;
@@ -380,16 +380,16 @@ go
 
 Create View vProductInventoriesWithPreviousMonthCountsWithKPIs
 As
-    Select Top 1000000000
-        *
-        , Case
-            When [Total Count] > [Previous Count] Then 1
-            When [Total Count] = [Previous Count] Then 0
-            When [Total Count] < [Previous Count] Then -1
-          End
-        As [Count Change KPI]
-    From vProductInventoriesWithPreviousMonthCounts
-    Order by [ProductName], DatePart(month, [Inventory Date]), [Total Count];
+	Select Top 1000000000
+		*
+		, Case
+			When [Total Count] > [Previous Count] Then 1
+			When [Total Count] = [Previous Count] Then 0
+			When [Total Count] < [Previous Count] Then -1
+		  End
+		As [Count Change KPI]
+	From vProductInventoriesWithPreviousMonthCounts
+	Order by [ProductName], DatePart(month, [Inventory Date]), [Total Count];
 go
 
 -- Important: This new view must use your vProductInventoriesWithPreviousMonthCounts view!
@@ -407,18 +407,28 @@ go
 -- Include an Order By clause in the function using this code: 
 -- Year(Cast(v1.InventoryDate as Date))
 -- and note what effect it has on the results.
-
 Create Function dbo.fProductInventoriesWithPreviousMonthCountsWithKPIs(@kpi int)
-    Returns Table
-    As
-        Return 
-        (
-            Select Top 10000000
-            *
-            From dbo.vProductInventoriesWithPreviousMonthCountsWithKPIs
-            Where [Count Change KPI] = @kpi
-            Order By Year(Cast([Inventory Date] as Date))
-        )
+	Returns @results Table 
+			(
+				[ProductName] sql_variant
+				, [Inventory Date] sql_variant
+				, [Total Count] sql_variant
+				, [Previous Count] sql_variant
+				, [Count Change KPI] sql_variant
+			)
+	As
+		Begin
+			If(@kpi >= -1 And @kpi <= 1)
+				Insert Into @results
+					Select Top 10000000
+					*
+					From dbo.vProductInventoriesWithPreviousMonthCountsWithKPIs
+					Where [Count Change KPI] = @kpi
+					Order By Year(Cast([Inventory Date] as Date))
+			Else
+				Insert Into @results Values (null, null, null, null, null)
+		Return
+		End
 go
 
 /* Check that it works:
