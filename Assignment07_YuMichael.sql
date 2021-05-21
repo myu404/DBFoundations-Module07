@@ -334,18 +334,28 @@ go
 -- Include an Order By clause in the function using this code: 
 -- Year(Cast(v1.InventoryDate as Date))
 -- and note what effect it has on the results.
-
 Create Function dbo.fProductInventoriesWithPreviousMonthCountsWithKPIs(@kpi int)
-	Returns Table
+	Returns @results Table 
+			(
+				[ProductName] sql_variant
+				, [Inventory Date] sql_variant
+				, [Total Count] sql_variant
+				, [Previous Count] sql_variant
+				, [Count Change KPI] sql_variant
+			)
 	As
-		Return 
-		(
-			Select Top 10000000
-			*
-			From dbo.vProductInventoriesWithPreviousMonthCountsWithKPIs
-			Where [Count Change KPI] = @kpi
-			Order By Year(Cast([Inventory Date] as Date))
-		)
+		Begin
+			If(@kpi >= -1 And @kpi <= 1)
+				Insert Into @results
+					Select Top 10000000
+					*
+					From dbo.vProductInventoriesWithPreviousMonthCountsWithKPIs
+					Where [Count Change KPI] = @kpi
+					Order By Year(Cast([Inventory Date] as Date))
+			Else
+				Insert Into @results Values (null, null, null, null, null)
+		Return
+		End
 go
 
 /* Check that it works:
